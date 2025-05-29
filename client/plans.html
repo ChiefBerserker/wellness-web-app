@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Matra | Plans & Pricing</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #1e1e1e;
+      align-items: center;
+    }
+
+    .logo a {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 1.5rem;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .plans-header {
+      text-align: center;
+      padding: 4rem 2rem 2rem;
+    }
+
+    .plans-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .plan {
+      background-color: #1e1e1e;
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .plan h2 {
+      margin-bottom: 0.5rem;
+    }
+
+    .price {
+      font-size: 2rem;
+      margin: 1rem 0;
+    }
+
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0 2rem;
+    }
+
+    .features li {
+      margin-bottom: 0.5rem;
+    }
+
+    .plan button {
+      padding: 0.75rem 1.5rem;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo"><a href="/">Matra</a></div>
+    <div class="nav-links" id="navLinks">
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </div>
+  </nav>
+
+  <header class="plans-header">
+    <h1>Choose the Right Plan for Your Team</h1>
+    <p>Flexible pricing tailored to your business' wellbeing goals.</p>
+  </header>
+
+  <section class="pricing-grid">
+    <div class="plan">
+      <h2>Basic</h2>
+      <p class="price">£4/month/User</p>
+      <ul class="features">
+        <li>Unlimited</li>
+        <li>Basic goal tracking</li>
+        <li>Standard leaderboard</li>
+      </ul>
+      <button onclick="location.href='signup.html'">Get Started</button>
+    </div>
+
+    <div class="plan">
+      <h2>Pro</h2>
+      <p class="price">£6/month/User</p>
+      <ul class="features">
+        <li>Unlimited users</li>
+        <li>Advanced analytics</li>
+        <li>Custom goal types</li>
+        <li>Email reminders</li>
+      </ul>
+      <button onclick="location.href='signup.html'">Start Free Trial</button>
+    </div>
+
+    <div class="plan">
+      <h2>Enterprise</h2>
+      <p class="price">Custom</p>
+      <ul class="features">
+        <li>Mat hardware integration</li>
+        <li>Dedicated support</li>
+        <li>Team onboarding</li>
+        <li>HR reporting tools</li>
+      </ul>
+      <button onclick="location.href='contact.html'">Contact Us</button>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Matra — All rights reserved
+  </footer>
+
+  <script>
+    async function checkLogin() {
+      const navLinks = document.getElementById('navLinks');
+      try {
+        const res = await fetch('/me');
+        if (res.ok) {
+          const { user } = await res.json();
+          navLinks.innerHTML = `
+            <span>Welcome, ${user.name || user.email}</span>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="/logout">Logout</a>
+          `;
+        }
+      } catch (err) {
+        console.warn('Not logged in');
+      }
+    }
+
+    checkLogin();
+  </script>
+</body>
+</html>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Matra | Empowering Office Wellbeing</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #111;
+      color: #fff;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem;
+      background: #222;
+    }
+
+    .nav-links a {
+      color: white;
+      margin-left: 1rem;
+      text-decoration: none;
+    }
+
+    .dashboard-container {
+  display: flex;
+  flex-wrap: wrap;          /* allows children to wrap on smaller screens */
+  gap: 2rem;
+  width: 100%;
+  max-width: 1200px;        /* max width for content */
+  margin: 0 auto;           /* center on page */
+  padding: 0 1rem;          /* some side padding */
+  box-sizing: border-box;
+}
+
+.main-content {
+  flex: 1 1 600px;          /* flexible grow, shrink; base width 600px */
+  min-width: 300px;         /* don't shrink below 300px */
+  display: block;           /* vertical stacking inside */
+}
+
+.leaderboard {
+  flex: 0 1 300px;          /* don't grow, can shrink, base width 300px */
+  background: #222;
+  margin-top: 100px;
+  padding: 1rem;
+  border-radius: 10px;
+  min-width: 250px;
+  box-sizing: border-box;
+}
+
+/* Progress bars and lists full width inside their containers */
+.progress-bar-container,
+#goalsList,
+#weeklyGoalsList {
+  width: 100%;
+}
+
+.progress-bar-container {
+      background-color: #333;
+      border-radius: 10px;
+      height: 20px;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+.progress-bar-fill {
+      background-color: limegreen;
+      height: 100%;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+/* Media query for smaller screens */
+@media (max-width: 1100px) {
+  .dashboard-container {
+    flex-direction: column; /* stack everything vertically */
+  }
+
+  .main-content,
+  .leaderboard {
+    flex: 1 1 100%;
+    min-width: auto;
+  }
+
+  .leaderboard {
+    margin-top: 2rem; /* space above leaderboard */
+  }
+}
+
+    
+
+    ul#goalsList {
+      list-style: none;
+      padding: 0;
+    }
+
+    li.goal-item {
+      background: #222;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    ul#weeklyGoalsList{
+      list-style: none;
+      padding: 0;
+    }
+
+    li.weeklyGoal-item {
+      background: #222;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.4s ease, opacity 0.4s ease;
+    }
+
+    li.removing {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+
+    button {
+      background: limegreen;
+      color: black;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: gray;
+      cursor: default;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">Matra</a></div>
+    <div class="nav-links">
+      <a href="/dashboard.html">Dashboard</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </nav>
+
+  <main class="dashboard-container">
+  <section class="main-content">
+    <p id="welcomeMsg"></p>
+    <h1>Your Matra Dashboard</h1>
+
+    <section id="goalsSection">
+      <h2>Today's Goals</h2>
+      <div class="progress-bar-container">
+        <div id="progressFill" class="progress-bar-fill"></div>
+      </div>
+      <ul id="goalsList"></ul>
+    </section>
+
+    <section id="weeklyGoalsSection">
+      <h2>This Week's Goals</h2>
+      <div class="progress-bar-container">
+        <div id="weeklyProgressFill" class="progress-bar-fill"></div>
+      </div>
+      <ul id="weeklyGoalsList"></ul>
+    </section>
+  </section>
+
+  <aside id="leaderboardSection" class="leaderboard">
+    <h2>🏆Leaderboard🏆</h2>
+    <ol id="leaderboardList"></ol>
+  </aside>
+</main>
+
+  <script>
+    async function fetchGoals() {
+  const res = await fetch('/goals/daily', { credentials: 'include' });
+  if (!res.ok) return;
+
+  const goals = await res.json();
+  const list = document.getElementById('goalsList');
+  list.innerHTML = '';
+
+  let completedCount = 0;
+
+  goals.forEach(goal => {
+    if (goal.completed) {
+      completedCount++;
+      return; // skip rendering completed goals
+    }
+
+    const li = document.createElement('li');
+    li.className = 'goal-item';
+    li.textContent = goal.description;
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Complete';
+
+    btn.onclick = async () => {
+      btn.disabled = true;
+
+      try {
+        const completeRes = await fetch('/goals/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goalId: goal.id })
+        });
+
+        if (completeRes.ok) {
+          confetti({ particleCount: 75, spread: 70, origin: { y: 0.6 } });
+          li.classList.add('removing');
+
+          setTimeout(() => {
+            fetchGoals(); // just fetch daily goals
+            fetchLeaderboard(); // optional refresh
+          }, 400);
+
+        } else {
+          const errorData = await completeRes.json();
+          alert(errorData.message || 'Error completing goal');
+          btn.disabled = false;
+        }
+
+      } catch (err) {
+        alert('Something went wrong');
+        btn.disabled = false;
+      }
+    };
+
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+
+  // Progress bar update
+  const percent = goals.length > 0 ? (completedCount / goals.length) * 100 : 0;
+  document.getElementById('progressFill').style.width = `${percent}%`;
+}
+
+async function fetchWeeklyGoals() {
+  const res = await fetch('/goals/weekly', { credentials: 'include' });
+  if (!res.ok) return;
+
+  const weeklyGoals = await res.json();
+  const list = document.getElementById('weeklyGoalsList');
+  list.innerHTML = '';
+
+  let completedCount = 0;
+
+  weeklyGoals.forEach(goal => {
+    if (goal.completed) {
+      completedCount++;
+      return; // don’t render completed goals
+    }
+
+    const li = document.createElement('li');
+    li.className = 'goal-item';
+    li.textContent = goal.description;
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Complete';
+
+    btn.onclick = async () => {
+      btn.disabled = true;
+
+      try {
+        const completeRes = await fetch('/goals/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ goalId: goal.id })
+        });
+
+        if (completeRes.ok) {
+          confetti({ particleCount: 75, spread: 70, origin: { y: 0.6 } });
+          li.classList.add('removing');
+
+          setTimeout(() => {
+            fetchLeaderboard();
+            fetchGoals();
+            fetchWeeklyGoals();
+          }, 400);
+
+        } else {
+          const errorData = await completeRes.json();
+          alert(errorData.message || 'Error completing goal');
+          btn.disabled = false;
+        }
+
+      } catch (err) {
+        alert('Something went wrong');
+        btn.disabled = false;
+      }
+    };
+
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+
+  // Update progress bar for weekly goals
+  const percent = weeklyGoals.length > 0 ? (completedCount / weeklyGoals.length) * 100 : 0;
+  document.getElementById('weeklyProgressFill').style.width = `${percent}%`;
+}
+
+async function fetchLeaderboard() {
+  const res = await fetch('/goals/leaderboard', { credentials: 'include' });
+  if (!res.ok) return;
+
+  const leaderboard = await res.json();
+  const list = document.getElementById('leaderboardList');
+  list.innerHTML = '';
+
+  leaderboard.forEach(user => {
+    const points = user.totalPoints ?? 0;
+    const name = user.name || user.email || 'Unknown';
+    const li = document.createElement('li');
+    li.textContent = `${name} — ${points} pts`;
+    list.appendChild(li);
+  });
+}
+
+async function loadCurrentUser() {
+  try {
+    const res = await fetch('/me', { credentials: 'include' });
+
+    if (!res.ok) {
+      document.getElementById('welcomeMsg').textContent = 'Not logged in';
+      return;
+    }
+
+    const data = await res.json();
+    console.log("Response from /me:", data);
+
+    const user = data?.user;
+    const displayName = user?.name ?? user?.email ?? 'Unknown';
+
+    document.getElementById('welcomeMsg').textContent = `Logged in as: ${displayName}`;
+  } catch (err) {
+    console.error("Failed to load user:", err);
+    document.getElementById('welcomeMsg').textContent = 'Error loading user';
+  }
+}
+
+async function checkLoginStatus() {
+  try {
+    const res = await fetch('/me', { credentials: 'include' });
+    const navLinks = document.querySelector('.nav-links');
+
+    if (!navLinks) {
+      console.error('nav-links element not found');
+      return;
+    }
+
+    if (res.ok) {
+      navLinks.innerHTML = `
+        <a href="/dashboard.html">Dashboard</a>
+        <a href="/logout">Logout</a>
+      `;
+    } else {
+      navLinks.innerHTML = `
+        <a href="/login.html">Login</a>
+        <a href="/register.html">Register</a>
+      `;
+    }
+  } catch (err) {
+    console.error('Error checking login status:', err);
+  }
+}
+
+window.onload = async () => {
+  await checkLoginStatus();
+  loadCurrentUser();
+  fetchGoals();
+  fetchWeeklyGoals();
+  fetchLeaderboard();
+};
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Login | Matra</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #1e1e1e;
+      align-items: center;
+    }
+
+    .logo a {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 1.5rem;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <nav class="navbar">
+    <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">Matra</a></div>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="signup.html">Sign Up</a>
+    </div>
+  </nav>
+
+  <main class="auth-container">
+    <h1>Login to Your Account</h1>
+    <form id="loginForm">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required />
+
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required />
+
+      <button type="submit">Login</button>
+    </form>
+    <p>Don't have an account? <a href="signup.html">Sign up</a></p>
+    <p id="errorMsg"></p>
+  </main>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.textContent = '';
+
+      const data = {
+        email: form.email.value,
+        password: form.password.value,
+      };
+
+      try {
+        const res = await fetch('/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          window.location.href = '/dashboard.html';
+        } else {
+          errorMsg.textContent = result.message || 'Login failed';
+        }
+      } catch (err) {
+        errorMsg.textContent = 'Network error';
+      }
+    });
+  </script>
+</body>
+</html>

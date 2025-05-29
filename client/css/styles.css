@@ -1,0 +1,471 @@
+/* === Global Styles === */
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+nav.navbar {
+  height: 80px;
+  background: #1f1f1f;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* center contents */
+  position: relative;
+  padding: 0 2rem;
+}
+
+nav .logo {
+  font-weight: bold;
+  font-size: 1.8rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+nav .nav-links {
+  position: absolute;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a {
+  margin-left: 1rem;
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* === Homepage Hero Section === */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+  width: 100%;
+  background: url('/images/office_wellness.jpg') center/cover no-repeat;
+  position: relative;
+  text-align: center;
+  padding: 4rem 2rem;
+  box-sizing: border-box;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  color: #f0f0f0;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.hero button {
+  padding: 0.75rem 1.5rem;
+  background: #007bff;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* === Homepage Section Cards === */
+.sections {
+  padding: 4rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.card {
+  background-color: #1c1c1c;
+  padding: 1.5rem;
+  border-radius: 10px;
+  position: relative;
+  color: #f0f0f0;
+}
+
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.card h3 {
+  margin: 0.5rem 0;
+}
+
+/* === Footer === */
+footer {
+  text-align: center;
+  padding: 2rem;
+  color: #777;
+}
+
+/* === Dashboard === */
+.dashboard-container {
+  display: flex;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+/* Goals container */
+#goalsSection {
+  margin-top: 2rem;
+}
+
+#goalsList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each goal card */
+#goalsList li {
+  background-color: #1c1c1c;
+  color: #f0f0f0;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+/* Completed goals style */
+#goalsList li.completed {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* Complete button */
+#goalsList button {
+  background-color: #007bff;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#goalsList button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+#goalsList button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+#weeklyGoalsList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each goal card */
+#weeklyGoalsList li {
+  background-color: #1c1c1c;
+  color: #f0f0f0;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+/* Completed goals style */
+#weeklyGoalsList li.completed {
+  opacity: 0.5;
+  text-decoration: line-through;
+}
+
+/* Complete button */
+#weeklyGoalsList button {
+  background-color: #007bff;
+  border: none;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#weeklyGoalsList button:hover:not(:disabled) {
+  background-color: #0056b3;
+}
+
+#weeklyGoalsList button:disabled {
+  background-color: #555;
+  cursor: not-allowed;
+}
+
+
+
+/* Pop animation for goal card */
+@keyframes slowPop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.pop-animation {
+  animation: slowPop 0.6s ease forwards;
+}
+
+.fade-out {
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.main-content {
+  flex: 2;
+}
+
+.leaderboard {
+  flex: 1;
+  background: #111111; /* match your card/dark theme */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.1);
+  max-height: 400px;
+  overflow-y: auto;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #f0f0f0; /* light text */
+}
+
+
+.leaderboard h2 {
+  margin-top: 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.leaderboard ol {
+  padding-left: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.leaderboard li {
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Rankings with color + emojis */
+.leaderboard li:nth-child(1)::before {
+  content: "👑";
+  color: rgb(255, 217, 0);
+}
+
+.leaderboard li:nth-child(1) {
+  background-color: #fff8dc; /* light gold */
+  color: #dca210;
+}
+
+.leaderboard li:nth-child(2)::before {
+  content: "💪";
+  color: silver;
+}
+
+.leaderboard li:nth-child(2) {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+.leaderboard li:nth-child(3)::before {
+  content: "🥉";
+  color: #cd7f32;
+}
+
+.leaderboard li:nth-child(3) {
+  background-color: #fbe4d5;
+  color: #cd7f32;
+}
+
+.leaderboard li:nth-child(4)::before {
+  content: "✨";
+  color: purple;
+}
+
+.leaderboard li:nth-child(4) {
+  background-color: #f3e8ff;
+  color: #6a0dad;
+}
+
+.leaderboard li:nth-child(5)::before {
+  content: "🔥";
+  color: #1e90ff;
+}
+
+.leaderboard li:nth-child(5) {
+  background-color: #e0f7ff;
+  color: #1e90ff;
+}
+
+@keyframes crownGlow {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+  }
+}
+
+.leaderboard li:nth-child(1) {
+  background-color: #fffbea;
+  color: #e8aa0d;
+  animation: crownGlow 1.5s ease-in-out infinite;
+  border: 2px solid gold;
+}
+
+@keyframes crownBounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+.leaderboard li:nth-child(1)::before {
+  content: "👑";
+  color: gold;
+  display: inline-block;
+  animation: crownBounce 1.5s ease-in-out infinite;
+}
+
+/* === Auth Pages (Login & Signup) === */
+.auth-page {
+  background-color: #121212;
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-page .auth-container {
+  background: #1e1e1e;
+  padding: 2.5rem;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.6);
+  margin: 4rem auto;
+  box-sizing: border-box;
+}
+
+.auth-page h1 {
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.auth-page label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.auth-page input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.auth-page button {
+  width: 100%;
+  background-color: #111;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.auth-page button:hover {
+  background-color: #333;
+}
+
+.auth-page p {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.auth-page p a {
+  color: #6fa8dc;
+  text-decoration: none;
+}
+
+.auth-page p a:hover {
+  text-decoration: underline;
+}
+
+.auth-page #errorMsg {
+  color: #ff6b6b;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-weight: 600;
+}

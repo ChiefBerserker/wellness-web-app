@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Matra | Empowering Office Wellbeing</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 2rem;
+      background-color: #1e1e1e;
+      align-items: center;
+    }
+
+    .logo a {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: white;
+      text-decoration: none;
+    }
+
+    .nav-links a {
+      color: #ccc;
+      text-decoration: none;
+      margin-left: 1.5rem;
+    }
+
+    .nav-links a:hover {
+      color: #fff;
+    }
+
+    .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 90vh;
+    width: 100%;
+    background: url('/images/office_wellness.jpg') center/cover no-repeat;
+    position: relative;
+    text-align: center;
+    padding: 4rem 2rem;
+    box-sizing: border-box;
+    }
+
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .hero button {
+      padding: 0.75rem 1.5rem;
+      background: #007bff;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .sections {
+      padding: 4rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background-color: #1c1c1c;
+      padding: 1.5rem;
+      border-radius: 10px;
+      position: relative;
+    }
+
+    .card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    .card h3 {
+      margin: 0.5rem 0;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="logo"><a href="/">Matra</a></div>
+    <div class="nav-links" id="navLinks">
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Empowering Office Wellbeing</h1>
+      <p>Track goals, support each other, and build healthier workplaces with Matra.</p>
+      <button onclick="location.href='plans.html'">Get Started</button>
+    </div>
+  </section>
+
+  <section class="sections">
+    <div class="card">
+      <img src="/images/goals.jpg" alt="Goals">
+      <h3>Goal Setting</h3>
+      <p>Help teams stay accountable with clear wellbeing goals tracked daily or weekly.</p>
+    </div>
+    <div class="card">
+      <img src="/images/leaderboard.jpg" alt="Leaderboard">
+      <h3>Leaderboard</h3>
+      <p>Foster friendly competition with live leaderboards and positive engagement.</p>
+    </div>
+    <div class="card">
+      <img src="/images/integration.jpg" alt="Integration">
+      <h3>Mat Integration</h3>
+      <p>Bridge the gap between physical activity and software with real-time syncing mats.</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2025 Matra — All rights reserved
+  </footer>
+
+  <script>
+    fetch('/me')
+    .then(res => res.ok ? res.json() : null)
+    .then(data => {
+      const nav = document.getElementById('navLinks');
+      if (data?.user) {
+        nav.innerHTML = `
+          <a href="dashboard.html">Dashboard</a>
+          <a href="/logout">Logout</a>
+        `;
+      }
+    })
+    .catch(() => {}); // silently ignore if not logged in
+
+    const params = new URLSearchParams(window.location.search);
+    const company = params.get('company') || 'your company';
+    document.getElementById('companyText').textContent = `You've arrived from ${company}.`;
+  </script>
+</body>
+</html>
