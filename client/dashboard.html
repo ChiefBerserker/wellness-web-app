@@ -1,19 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Matra | Empowering Office Wellbeing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thira | Empowering Office Wellbeing</title>
   <link rel="stylesheet" href="css/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      margin: 0;
-      padding: 20px;
-      background: #111;
-      color: #fff;
-    }
 
     .navbar {
       display: flex;
@@ -23,7 +16,7 @@
     }
 
     .nav-links a {
-      color: white;
+      color: rgb(255, 255, 255);
       margin-left: 1rem;
       text-decoration: none;
     }
@@ -47,7 +40,7 @@
 
 .leaderboard {
   flex: 0 1 300px;          /* don't grow, can shrink, base width 300px */
-  background: #222;
+  background: #354EAD;
   margin-top: 100px;
   padding: 1rem;
   border-radius: 10px;
@@ -149,18 +142,52 @@
   </style>
 </head>
 <body>
+  <div class="temp-banner">
+  🚧 Prototype Preview – Live for demo only 🚧
+</div>
   <nav class="navbar">
-    <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">Matra</a></div>
-    <div class="nav-links">
-      <a href="/dashboard.html">Dashboard</a>
-      <a href="/logout">Logout</a>
-    </div>
-  </nav>
+
+  <!-- Hamburger (left) -->
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- DESKTOP left nav links -->
+  <div class="desktop-left-links">
+    <a href="index.html">Home</a>
+    <a href="who-we-are.html">Who We Are</a>
+    <a href="what-we-do.html">What We Do</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Mobile menu (left) -->
+  <div id="mobileMenu" class="mobile-menu hidden">
+    <a href="index.html">Home</a>
+    <a href="who-we-are.html">Who We Are</a>
+    <a href="what-we-do.html">What We Do</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Centered Logo -->
+  <div class="logo">
+    <a href="/"><img src="/images/thira-logo.png" alt="Project Thira Logo" height="40" /></a>
+  </div>
+
+  <!-- Right nav links -->
+  <div class="nav-links" id="navLinks">
+    <a href="signup.html">Sign Up</a>
+    <a href="login.html">Login</a>
+  </div>
+
+</nav>
 
   <main class="dashboard-container">
   <section class="main-content">
     <p id="welcomeMsg"></p>
-    <h1>Your Matra Dashboard</h1>
+    <a href="/admin" id="admin-panel-link" class="btn">Admin Panel</a>
+    <h1>Your Thira Dashboard</h1>
 
     <section id="goalsSection">
       <h2>Today's Goals</h2>
@@ -184,6 +211,29 @@
     <ol id="leaderboardList"></ol>
   </aside>
 </main>
+
+<div id="moodPopup" class="mood-popup hidden">
+  <button class="close-btn">x</button>
+  <p>How are you feeling today?</p>
+  <div class="mood-options">
+    <button data-score="1">😞</button>
+    <button data-score="2">😐</button>
+    <button data-score="3">🙂</button>
+    <button data-score="4">😄</button>
+    <button data-score="5">🤩</button>
+  </div>
+</div>
+
+<footer>
+    <img src="/images/thira-logo.png" alt="Thira Logo" />
+    <div>
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2025 Project Thira. All rights reserved.</p>
+  </footer>
 
   <script>
     async function fetchGoals() {
@@ -377,6 +427,177 @@ async function checkLoginStatus() {
     console.error('Error checking login status:', err);
   }
 }
+function showMoodPopup(type) {
+  const popup = document.getElementById('moodPopup');
+  const promptText = popup.querySelector('p');
+
+  promptText.textContent = `How are you feeling this ${type}?`;
+  popup.style.display = 'block';
+
+  // Show mood buttons if hidden
+  const buttonsContainer = popup.querySelector('.mood-options');
+  buttonsContainer.style.display = 'flex';
+
+  // Remove any previous message paragraph if exists (optional)
+  const thanksMsg = popup.querySelector('.thanks-msg');
+  if (thanksMsg) thanksMsg.remove();
+
+  // The buttons already have event listeners attached on page load
+}
+
+// Attach click handlers ONCE after DOM loads
+document.addEventListener('DOMContentLoaded', async () => {
+  const popup = document.getElementById('moodPopup');
+  const closeBtn = popup.querySelector('.close-btn');
+  const buttons = popup.querySelectorAll('.mood-options button');
+  const promptText = popup.querySelector('p');
+
+  // 1. Determine current mood type
+  function getCurrentMoodType() {
+    const hour = new Date().getHours();
+    if (hour >= 4 && hour < 12) {
+      return 'morning';
+    } else if (hour >= 12 && hour < 20) {
+      return 'afternoon';
+    }
+    return null; // Don't show outside these hours
+  }
+
+  const moodType = getCurrentMoodType();
+  if (!moodType) return;
+
+  // 2. Get current user
+  let userId = null;
+  try {
+    const res = await fetch('/me', { credentials: 'include' });
+    const user = await res.json();
+    userId = user.id || user.email || user.username;
+  } catch (err) {
+    console.error('Failed to get user info', err);
+    return;
+  }
+
+  const dismissKey = `moodPopupDismissed_${userId}_${moodType}`;
+
+  // 3. Check if that mood type has already been submitted today
+  try {
+    const res = await fetch('/mood/today', { credentials: 'include' });
+    const data = await res.json();
+    if (data && data[moodType] != null) {
+      return; // Already submitted
+    }
+  } catch (err) {
+    console.error('Failed to fetch today\'s mood data:', err);
+    return;
+  }
+
+  // 4. Attach click handlers to mood buttons
+  buttons.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const moodValue = parseInt(btn.getAttribute('data-score'));
+      buttons.forEach(b => b.disabled = true);
+
+      try {
+        const res = await fetch(`/mood/${moodType}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ moodValue })
+        });
+
+        if (res.ok) {
+          popup.querySelector('.mood-options').style.display = 'none';
+          const thanksP = document.createElement('p');
+          thanksP.textContent = 'Thanks for sharing your mood! 😊';
+          thanksP.classList.add('thanks-msg');
+          popup.appendChild(thanksP);
+
+          setTimeout(() => {
+            popup.style.display = 'none'
+            buttons.forEach(b => b.disabled = false);
+            thanksP.remove();
+            localStorage.setItem(dismissKey, 'true');
+          }, 3000);
+        } else {
+          alert('Failed to save mood. Please try again.');
+          buttons.forEach(b => b.disabled = false);
+        }
+      } catch (err) {
+        alert('Error sending mood data.');
+        console.error(err);
+        buttons.forEach(b => b.disabled = false);
+      }
+    });
+  });
+
+  closeBtn.addEventListener('click', () => {
+    popup.style.display = 'none';
+    localStorage.setItem(dismissKey, 'true');
+  });
+
+  // 5. Show popup if not dismissed
+  if (!localStorage.getItem(dismissKey)) {
+    promptText.textContent = `How are you feeling this ${moodType}?`;
+    popup.style.display = 'block';
+  }
+});
+
+
+
+async function checkMoodToday() {
+  // Example: call your backend to check if the user logged mood today
+  try {
+    const response = await fetch('/mood/check-today', { credentials: 'include' });
+    if (response.ok) {
+      const data = await response.json();
+      if (data.moodLogged) {
+        console.log('Mood already logged today');
+        // Hide popup or update UI accordingly
+        document.getElementById('moodPopup').style.display = 'none';
+      } else {
+        console.log('Mood not logged today, show popup');
+        document.getElementById('moodPopup').style.display = 'block';
+      }
+    }
+  } catch (err) {
+    console.error('Error checking mood today', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const response = await fetch('/me', {
+      credentials: 'include'
+    });
+
+    if (!response.ok) throw new Error('Not authenticated');
+
+    const data = await response.json();
+    const user = data.user; // 👈 this line fixes it
+
+    document.getElementById('welcomeMsg').textContent = `Welcome, ${user.name}`;
+
+    const adminLink = document.getElementById('admin-panel-link');
+    if (user.role === 'admin') {
+      adminLink.style.display = 'inline-block';
+    } else {
+      adminLink.style.display = 'none';
+    }
+
+  } catch (err) {
+    console.error('Error fetching user info:', err);
+  }
+});
+
+const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('hidden');
+  });
+
+
 
 window.onload = async () => {
   await checkLoginStatus();
@@ -384,6 +605,7 @@ window.onload = async () => {
   fetchGoals();
   fetchWeeklyGoals();
   fetchLeaderboard();
+  checkMoodToday();
 };
 
   </script>

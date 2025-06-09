@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Login | Matra</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Thira</title>
   <link rel="stylesheet" href="css/styles.css" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      background-color: #1e1e1e;
-      align-items: center;
-    }
-
-    .logo a {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: white;
-      text-decoration: none;
-    }
-
-    .nav-links a {
-      color: #ccc;
-      text-decoration: none;
-      margin-left: 1.5rem;
-    }
-
-    .nav-links a:hover {
-      color: #fff;
-    }
-  </style>
 </head>
-<body class="auth-page">
+<body>
+  <div class="temp-banner">
+  🚧 Prototype Preview – Live for demo only 🚧
+</div>
   <nav class="navbar">
-    <div class="logo"><a href="index.html" style="text-decoration: none; color: white;">Matra</a></div>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="signup.html">Sign Up</a>
-    </div>
-  </nav>
+
+  <!-- Hamburger (left) -->
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- DESKTOP left nav links -->
+  <div class="desktop-left-links">
+    <a href="index.html">Home</a>
+    <a href="who-we-are.html">Who We Are</a>
+    <a href="what-we-do.html">What We Do</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Mobile menu (left) -->
+  <div id="mobileMenu" class="mobile-menu hidden">
+    <a href="index.html">Home</a>
+    <a href="who-we-are.html">Who We Are</a>
+    <a href="what-we-do.html">What We Do</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Centered Logo -->
+  <div class="logo">
+    <a href="/"><img src="/images/thira-logo.png" alt="Project Thira Logo" height="40" /></a>
+  </div>
+
+  <!-- Right nav links -->
+  <div class="nav-links" id="navLinks">
+    <a href="signup.html">Sign Up</a>
+    <a href="login.html">Login</a>
+  </div>
+
+</nav>
 
   <main class="auth-container">
     <h1>Login to Your Account</h1>
@@ -56,37 +63,61 @@
     <p id="errorMsg"></p>
   </main>
 
+  <footer>
+    <img src="/images/thira-logo.png" alt="Thira Logo" />
+    <div>
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2025 Project Thira. All rights reserved.</p>
+  </footer>
+
   <script>
-    const form = document.getElementById('loginForm');
-    const errorMsg = document.getElementById('errorMsg');
+  const form = document.getElementById('loginForm');
+  const errorMsg = document.getElementById('errorMsg');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      errorMsg.textContent = '';
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg.textContent = '';
 
-      const data = {
-        email: form.email.value,
-        password: form.password.value,
-      };
+    const data = {
+      email: form.email.value,
+      password: form.password.value,
+    };
 
-      try {
-        const res = await fetch('/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
+    try {
+      const res = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
 
-        const result = await res.json();
+      const result = await res.json();
 
-        if (res.ok) {
-          window.location.href = '/dashboard.html';
+      if (res.ok) {
+        if (result.role === 'admin') {
+          window.location.href = '/admin.html';  // admin panel page
         } else {
-          errorMsg.textContent = result.message || 'Login failed';
+          window.location.href = '/dashboard.html';  // regular user dashboard
         }
-      } catch (err) {
-        errorMsg.textContent = 'Network error';
+      } else {
+        errorMsg.textContent = result.message || 'Login failed';
       }
-    });
-  </script>
+    } catch (err) {
+      errorMsg.textContent = 'Network error';
+    }
+  });
+
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('hidden');
+  });
+</script>
+
 </body>
 </html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>What We Do | Thira</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="temp-banner">
+  🚧 Prototype Preview – Live for demo only 🚧
+</div>
+     <nav class="navbar">
+    <!-- Hamburger (left) -->
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- DESKTOP left nav links -->
+    <div class="desktop-left-links">
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html" class="active">Who We Are</a>
+      <a href="what-we-do.html">What We Do</a>
+      <a href="leaderboard.html">Leaderboard</a>
+    </div>
+
+    <!-- Mobile menu (left) -->
+    <div id="mobileMenu" class="mobile-menu hidden">
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html" class="active">Who We Are</a>
+      <a href="what-we-do.html">What We Do</a>
+      <a href="leaderboard.html">Leaderboard</a>
+    </div>
+
+    <!-- Centered Logo -->
+    <div class="logo">
+      <a href="/"><img src="/images/thira-logo.png" alt="Project Thira Logo" height="40" /></a>
+    </div>
+
+    <!-- Right nav links -->
+    <div class="nav-links" id="navLinks">
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </div>
+  </nav>
+  <div id="what-we-do-page">
+    <header>
+      <h1>What We Do</h1>
+      <p class="lead">At Thira, we make workplace wellbeing simple, engaging, and effective. Our tools help you build healthy habits that stick, boosting productivity and happiness.</p>
+    </header>
+
+    <section>
+      <h2>Our Mission</h2>
+      <div class="content">
+        <p>We believe that true wellbeing integrates seamlessly into daily work life. That's why we provide smart, easy-to-use tools that encourage positive habits without extra hassle.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>How We Help</h2>
+      <div class="content">
+        <ul>
+          <li><strong>Daily Tracking:</strong> Simple and fast wellness check-ins to keep teams accountable.</li>
+          <li><strong>Engagement Gamification:</strong> Friendly competition with live leaderboards to motivate everyone.</li>
+          <li><strong>Insightful Analytics:</strong> Clear data for managers to understand and support team wellbeing.</li>
+          <li><strong>Integration:</strong> Sync with devices and platforms to automate wellness tracking.</li>
+          <li><strong>Accessible Design:</strong> A tool everyone can use, from desktop to mobile.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <h2>Why It Works</h2>
+      <div class="content">
+        <p>Our approach combines psychology, technology, and design to create a system that feels natural and rewarding. With instant recognition and clear progress, users stay motivated to keep improving their wellbeing.</p>
+      </div>
+    </section>
+
+    
+
+<section class="cta-section" style="
+  background-color: #f3f4f6;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  border-radius: 1rem;
+  margin: 3rem auto;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+">
+  <h2 style="
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #1f2937;
+    text-align: center;
+  ">
+    Why Thira Works for Your Team
+  </h2>
+  <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #4b5563;">
+    Discover how setting meaningful goals and tracking progress helps boost wellbeing and engagement across your workplace. Thira makes wellness simple, measurable, and motivating.
+  </p>
+  <a href="why-it-works.html" class="cta-button" style="background-color: #2563eb; color: white; padding: 1rem 2rem; font-weight: 600; text-decoration: none; border-radius: 0.5rem; transition: background-color 0.3s;">
+    Learn More
+  </a>
+</section>
+
+      <footer>
+    <img src="/images/thira-logo.png" alt="Thira Logo" />
+    <div>
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2025 Project Thira. All rights reserved.</p>
+  </footer>
+  </div>
+  <script>
+    // Same hamburger toggle script as index.html
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Navbar user login status update
+    fetch('/me')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        const nav = document.getElementById('navLinks');
+        if (data?.user) {
+          nav.innerHTML = `
+            <a href="dashboard.html">Dashboard</a>
+            <a href="/logout">Logout</a>
+          `;
+        }
+      })
+      .catch(() => {}); // fail silently
+  </script>
+</body>
+</html>

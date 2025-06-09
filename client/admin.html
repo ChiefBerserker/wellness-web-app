@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Employee Dashboard with Timeframe Toggle</title>
+<link rel="stylesheet" href="css/styles.css" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body {
+
+    padding: 20px;
+    background: #f9f9f9;
+    color: #333;
+  }
+  h1 {
+    margin-bottom: 10px;
+  }
+  label {
+    font-weight: bold;
+  }
+  select {
+    margin-left: 10px;
+    padding: 5px;
+  }
+  button {
+    margin-left: 20px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+  }
+  th, td {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  th {
+    background: #007bff;
+    color: white;
+  }
+  .risk-low {
+    color: green;
+    font-weight: bold;
+  }
+  .risk-medium {
+    color: orange;
+    font-weight: bold;
+  }
+  .risk-high {
+    color: red;
+    font-weight: bold;
+  }
+  canvas.sparkline-canvas {
+    width: 100px !important;
+    height: 30px !important;
+  }
+  #summaryText {
+    white-space: pre-wrap;
+    background: #eee;
+    padding: 10px;
+    margin-top: 15px;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+  .charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+  }
+  .chart-container {
+    background: white;
+    padding: 15px;
+    border-radius: 6px;
+    box-shadow: 0 0 5px #ccc;
+  }
+</style>
+</head>
+<body>
+  <div class="temp-banner">
+  🚧 Prototype Preview – Live for demo only 🚧
+</div>
+   <nav class="navbar">
+
+  <!-- Hamburger (left) -->
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <!-- DESKTOP left nav links -->
+  <div class="desktop-left-links">
+    <a href="index.html">Home</a>
+    <a href="who-we-are.html">Who We Are</a>
+    <a href="what-we-do.html">What We Do</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Mobile menu (left) -->
+  <div id="mobileMenu" class="mobile-menu hidden">
+    <a href="index.html">Home</a>
+    <a href="who-we-are.html">Who We Are</a>
+    <a href="what-we-do.html">What We Do</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Centered Logo -->
+  <div class="logo">
+    <a href="/"><img src="/images/thira-logo.png" alt="Project Thira Logo" height="40" /></a>
+  </div>
+
+  <!-- Right nav links -->
+  <div class="nav-links" id="navLinks">
+    <a href="signup.html">Sign Up</a>
+    <a href="login.html">Login</a>
+  </div>
+
+</nav>
+
+<h1>Employee Dashboard</h1>
+
+<label for="timeframeSelect">View Data:</label>
+<select id="timeframeSelect">
+  <option value="daily">Today</option>
+  <option value="weekly" selected>Last 7 Days</option>
+  <option value="monthly">Last 30 Days</option>
+</select>
+
+<button id="toggleRawBtn">Show Summary</button>
+
+<table id="employeeTable">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Role</th>
+      <th>Department</th>
+      <th>Avg Mood</th>
+      <th>Mood Trend</th>
+      <th>Progress %</th>
+      <th>Risk</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<div id="summaryText" style="display:none;"></div>
+
+<div class="charts">
+  <div class="chart-container">
+    <h3>Employee Progress</h3>
+    <canvas id="employeeProgressChart" width="400" height="250"></canvas>
+  </div>
+  <div class="chart-container">
+    <h3>Company Mood Distribution</h3>
+    <canvas id="companyMoodChart" width="400" height="250"></canvas>
+  </div>
+  <div class="chart-container">
+    <h3>Department Mood</h3>
+    <canvas id="departmentMoodChart" width="400" height="250"></canvas>
+  </div>
+  <div class="chart-container">
+    <h3>Weekly Mood Distribution</h3>
+    <canvas id="weeklyMoodDistChart" width="400" height="250"></canvas>
+  </div>
+</div>
+
+<footer>
+    <img src="/images/thira-logo.png" alt="Thira Logo" />
+    <div>
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2025 Project Thira. All rights reserved.</p>
+  </footer>
+
+<script>
+  // --- Sample employees data with daily, weekly, monthly arrays for demo ---
+  const employees = [
+    {
+      id: 1,
+      name: "Alice Smith",
+      role: "employee",
+      department: "Sales",
+      moodHistoryDaily: [3],
+      moodHistoryWeekly: [3, 2, 4, 2, 1, 2, 1],
+      moodHistoryMonthly: [3, 2, 4, 2, 1, 2, 1, 3, 4, 2, 3, 2, 1, 2, 3, 4, 2, 3, 2, 1, 2, 3, 2, 4, 2, 3, 2, 1, 2, 3],
+      progressPercentDaily: 80,
+      progressPercentWeekly: 75,
+      progressPercentMonthly: 60,
+      aiRisk: "medium"
+    },
+    {
+      id: 2,
+      name: "Bob Johnson",
+      role: "employee",
+      department: "HR",
+      moodHistoryDaily: [4],
+      moodHistoryWeekly: [4, 4, 3, 3, 5, 4, 4],
+      moodHistoryMonthly: [4,4,3,3,5,4,4,4,3,3,5,4,4,4,3,3,5,4,4,4,3,3,5,4,4,4,3,3,5,4],
+      progressPercentDaily: 90,
+      progressPercentWeekly: 85,
+      progressPercentMonthly: 70,
+      aiRisk: "low"
+    },
+    {
+      id: 3,
+      name: "Carol Lee",
+      role: "employee",
+      department: "Engineering",
+      moodHistoryDaily: [2],
+      moodHistoryWeekly: [2, 1, 2, 2, 1, 2, 3],
+      moodHistoryMonthly: [2,1,2,2,1,2,3,2,1,2,2,1,2,3,2,1,2,2,1,2,3,2,1,2,2,1,2,3,2,1],
+      progressPercentDaily: 65,
+      progressPercentWeekly: 60,
+      progressPercentMonthly: 55,
+      aiRisk: "high"
+    }
+  ];
+
+  const timeframeSelect = document.getElementById('timeframeSelect');
+  const tbody = document.querySelector("#employeeTable tbody");
+  const toggleRawBtn = document.getElementById('toggleRawBtn');
+  const summaryTextDiv = document.getElementById('summaryText');
+
+  // Store Chart instances globally
+  const sparklineCharts = {};
+  let employeeProgressChart, companyMoodChart, departmentMoodChart, weeklyMoodDistChart;
+
+  // Helper: Average Mood calculation
+  function avgMood(moods) {
+    if (!moods || moods.length === 0) return '-';
+    const sum = moods.reduce((a,b) => a + b, 0);
+    return (sum / moods.length).toFixed(2);
+  }
+
+  // Risk badge CSS class
+  function getRiskBadgeClass(risk) {
+    if (risk === "low") return "risk-low";
+    if (risk === "medium") return "risk-medium";
+    if (risk === "high") return "risk-high";
+    return "";
+  }
+
+  // Render sparkline for mood trends
+  function renderSparkline(canvasId, data) {
+    const ctx = document.getElementById(canvasId).getContext('2d');
+    if (sparklineCharts[canvasId]) {
+      sparklineCharts[canvasId].destroy();
+    }
+    sparklineCharts[canvasId] = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: data.map((_, i) => i + 1),
+        datasets: [{
+          data,
+          borderColor: '#007bff',
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0
+        }]
+      },
+      options: {
+        responsive: false,
+        animation: false,
+        scales: {
+          x: { display: false },
+          y: { display: false, min: 1, max: 5 }
+        },
+        plugins: { legend: { display: false } },
+        elements: { line: { borderWidth: 2 } }
+      }
+    });
+  }
+
+  // Render employee table with current timeframe
+  function renderTable() {
+    const timeframe = timeframeSelect.value;
+    tbody.innerHTML = "";
+
+    employees.forEach(emp => {
+      const tr = document.createElement("tr");
+
+      // Basic info
+      const nameTd = document.createElement("td");
+      nameTd.textContent = emp.name;
+
+      const roleTd = document.createElement("td");
+      roleTd.textContent = emp.role;
+
+      const deptTd = document.createElement("td");
+      deptTd.textContent = emp.department;
+
+      // Mood history for timeframe
+      let moodHistory;
+      if (timeframe === "daily") moodHistory = emp.moodHistoryDaily;
+      else if (timeframe === "weekly") moodHistory = emp.moodHistoryWeekly;
+      else moodHistory = emp.moodHistoryMonthly;
+
+      const avgMoodTd = document.createElement("td");
+      avgMoodTd.textContent = avgMood(moodHistory);
+
+      const moodTrendTd = document.createElement("td");
+      const canvas = document.createElement("canvas");
+      canvas.classList.add("sparkline-canvas");
+      canvas.id = `sparkline-${emp.id}`;
+      moodTrendTd.appendChild(canvas);
+
+      let progressPercent;
+      if (timeframe === "daily") progressPercent = emp.progressPercentDaily;
+      else if (timeframe === "weekly") progressPercent = emp.progressPercentWeekly;
+      else progressPercent = emp.progressPercentMonthly;
+
+      const progressTd = document.createElement("td");
+      progressTd.textContent = progressPercent + "%";
+
+      const riskTd = document.createElement("td");
+      riskTd.innerHTML = `<span class="${getRiskBadgeClass(emp.aiRisk)}">${emp.aiRisk}</span>`;
+
+      tr.append(nameTd, roleTd, deptTd, avgMoodTd, moodTrendTd, progressTd, riskTd);
+      tbody.appendChild(tr);
+
+      renderSparkline(canvas.id, moodHistory);
+    });
+  }
+
+  // Generate plain text summary for raw data toggle
+  function generatePlainTextSummary() {
+    const timeframe = timeframeSelect.value;
+    let summary = `Summary for ${timeframe.toUpperCase()} timeframe:\n\n`;
+
+    employees.forEach(emp => {
+      let moods, progress;
+      if (timeframe === "daily") {
+        moods = emp.moodHistoryDaily;
+        progress = emp.progressPercentDaily;
+      } else if (timeframe === "weekly") {
+        moods = emp.moodHistoryWeekly;
+        progress = emp.progressPercentWeekly;
+      } else {
+        moods = emp.moodHistoryMonthly;
+        progress = emp.progressPercentMonthly;
+      }
+
+      summary += `Name: ${emp.name}\n`;
+      summary += `  Avg Mood: ${avgMood(moods)}\n`;
+      summary += `  Progress: ${progress}%\n`;
+      summary += `  Risk Level: ${emp.aiRisk}\n\n`;
+    });
+
+    return summary;
+  }
+
+  // Update all 4 charts with current timeframe data
+  function updateCharts() {
+    const timeframe = timeframeSelect.value;
+
+    // Employee progress chart
+    const labels = employees.map(e => e.name);
+    const progressData = employees.map(emp => {
+      if (timeframe === "daily") return emp.progressPercentDaily;
+      else if (timeframe === "weekly") return emp.progressPercentWeekly;
+      else return emp.progressPercentMonthly;
+    });
+
+    if (employeeProgressChart) {
+      employeeProgressChart.data.labels = labels;
+      employeeProgressChart.data.datasets[0].data = progressData;
+      employeeProgressChart.update();
+    } else {
+      const ctx = document.getElementById('employeeProgressChart').getContext('2d');
+      employeeProgressChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Progress %',
+            data: progressData,
+            backgroundColor: '#007bff'
+          }]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true, max: 100 }
+          }
+        }
+      });
+    }
+
+    // Company mood distribution: aggregate all moods from all employees into mood counts (1-5)
+    let allMoods = [];
+    employees.forEach(emp => {
+      let moods;
+      if (timeframe === "daily") moods = emp.moodHistoryDaily;
+      else if (timeframe === "weekly") moods = emp.moodHistoryWeekly;
+      else moods = emp.moodHistoryMonthly;
+      allMoods = allMoods.concat(moods);
+    });
+
+    const moodCounts = [1,2,3,4,5].map(mood => allMoods.filter(m => m === mood).length);
+
+    if (companyMoodChart) {
+      companyMoodChart.data.datasets[0].data = moodCounts;
+      companyMoodChart.update();
+    } else {
+      const ctx = document.getElementById('companyMoodChart').getContext('2d');
+      companyMoodChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['1 (Very Low)', '2', '3', '4', '5 (Very High)'],
+          datasets: [{
+            label: 'Mood Count',
+            data: moodCounts,
+            backgroundColor: [
+              '#dc3545',
+              '#fd7e14',
+              '#ffc107',
+              '#198754',
+              '#0d6efd'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'bottom' } }
+        }
+      });
+    }
+
+    // Department mood chart: average mood by department
+    const departments = [...new Set(employees.map(e => e.department))];
+    const avgMoodByDept = departments.map(dept => {
+      // collect moods for employees in this dept
+      let deptMoods = [];
+      employees.filter(e => e.department === dept).forEach(emp => {
+        let moods;
+        if (timeframe === "daily") moods = emp.moodHistoryDaily;
+        else if (timeframe === "weekly") moods = emp.moodHistoryWeekly;
+        else moods = emp.moodHistoryMonthly;
+        deptMoods = deptMoods.concat(moods);
+      });
+      return avgMood(deptMoods);
+    });
+
+    if (departmentMoodChart) {
+      departmentMoodChart.data.labels = departments;
+      departmentMoodChart.data.datasets[0].data = avgMoodByDept;
+      departmentMoodChart.update();
+    } else {
+      const ctx = document.getElementById('departmentMoodChart').getContext('2d');
+      departmentMoodChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: departments,
+          datasets: [{
+            label: 'Average Mood',
+            data: avgMoodByDept,
+            backgroundColor: '#17a2b8'
+          }]
+        },
+        options: {
+          scales: {
+            y: { beginAtZero: true, max: 5 }
+          }
+        }
+      });
+    }
+
+    // Weekly Mood Distribution: Mood count for last 7 days (if monthly or daily chosen, fallback to weekly)
+    // For demo, we'll just always show weekly mood counts
+    let weeklyMoods = [];
+    employees.forEach(emp => {
+      weeklyMoods = weeklyMoods.concat(emp.moodHistoryWeekly);
+    });
+    const weeklyMoodCounts = [1,2,3,4,5].map(mood => weeklyMoods.filter(m => m === mood).length);
+
+    if (weeklyMoodDistChart) {
+      weeklyMoodDistChart.data.datasets[0].data = weeklyMoodCounts;
+      weeklyMoodDistChart.update();
+    } else {
+      const ctx = document.getElementById('weeklyMoodDistChart').getContext('2d');
+      weeklyMoodDistChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['1 (Very Low)', '2', '3', '4', '5 (Very High)'],
+          datasets: [{
+            label: 'Mood Count (Last 7 days)',
+            data: weeklyMoodCounts,
+            backgroundColor: [
+              '#dc3545',
+              '#fd7e14',
+              '#ffc107',
+              '#198754',
+              '#0d6efd'
+            ]
+          }]
+        },
+        options: {
+          plugins: { legend: { position: 'right' } },
+          responsive: true
+        }
+      });
+    }
+  }
+
+  // Initial render
+  renderTable();
+  updateCharts();
+
+  // Toggle between summary text and table
+  let showingSummary = false;
+  toggleRawBtn.addEventListener('click', () => {
+    showingSummary = !showingSummary;
+    if (showingSummary) {
+      toggleRawBtn.textContent = "Show Table";
+      tbody.parentElement.style.display = "none";
+      summaryTextDiv.style.display = "block";
+      summaryTextDiv.textContent = generatePlainTextSummary();
+    } else {
+      toggleRawBtn.textContent = "Show Summary";
+      tbody.parentElement.style.display = "table";
+      summaryTextDiv.style.display = "none";
+    }
+  });
+
+  // Update on timeframe change
+  timeframeSelect.addEventListener('change', () => {
+    renderTable();
+    updateCharts();
+    if (showingSummary) {
+      summaryTextDiv.textContent = generatePlainTextSummary();
+    }
+  });
+</script>
+
+</body>
+</html>

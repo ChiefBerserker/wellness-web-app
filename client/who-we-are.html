@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Who We Are | Thira</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+    <div class="temp-banner">
+  🚧 Prototype Preview – Live for demo only 🚧
+</div>
+  <script src="js/main.js"></script>
+
+  <nav class="navbar">
+    <!-- Hamburger (left) -->
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- DESKTOP left nav links -->
+    <div class="desktop-left-links">
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html" class="active">Who We Are</a>
+      <a href="what-we-do.html">What We Do</a>
+      <a href="leaderboard.html">Leaderboard</a>
+    </div>
+
+    <!-- Mobile menu (left) -->
+    <div id="mobileMenu" class="mobile-menu hidden">
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html" class="active">Who We Are</a>
+      <a href="what-we-do.html">What We Do</a>
+      <a href="leaderboard.html">Leaderboard</a>
+    </div>
+
+    <!-- Centered Logo -->
+    <div class="logo">
+      <a href="/"><img src="/images/thira-logo.png" alt="Project Thira Logo" height="40" /></a>
+    </div>
+
+    <!-- Right nav links -->
+    <div class="nav-links" id="navLinks">
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </div>
+  </nav>
+<div id="who-we-are-page">
+  <main class="about-container">
+
+    <header class="page-header">
+      <h1>Who We Are</h1>
+      <p>We're building a workplace culture where wellness, focus, and purpose are part of the system — not an afterthought.</p>
+    </header>
+
+    <section class="about-section founder-section">
+      <div class="founder-image">
+        <img src="/images/founder.png" alt="Archie G. Harrison" />
+      </div>
+      <div class="founder-text">
+        <h2>Archie G. Harrison</h2>
+        <p class="subtitle">Founder of Thira</p>
+        <p>
+          I created Thira to make wellbeing work in the real world. After working across tech, retail, and support roles, I saw how little was done to help people thrive. So I built Thira — a platform designed to fit naturally into the workday and build better habits without extra fluff.
+        </p>
+      </div>
+    </section>
+
+    <section class="about-section mission-section">
+      <h2>Our Mission</h2>
+      <p>
+        Thira brings clarity, motivation, and positive culture into your team through small, trackable goals. Our goal is to embed healthy habits into everyday workflows — powered by data, empathy, and simplicity.
+      </p>
+    </section>
+
+    <section class="about-section values-section">
+      <h2>Core Values</h2>
+      <ul class="values-list">
+        <li><strong>🧠 Innovation:</strong> Always improving how wellbeing is done.</li>
+        <li><strong>🌱 Growth:</strong> Personal progress creates company success.</li>
+        <li><strong>🤝 Empathy:</strong> Understanding people makes better systems.</li>
+        <li><strong>🔒 Integrity:</strong> Privacy, trust, and clarity at every step.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <img src="/images/thira-logo.png" alt="Thira Logo" />
+    <div>
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2025 Project Thira. All rights reserved.</p>
+  </footer>
+</div>
+
+  <script>
+    // Same hamburger toggle script as index.html
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Navbar user login status update
+    fetch('/me')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        const nav = document.getElementById('navLinks');
+        if (data?.user) {
+          nav.innerHTML = `
+            <a href="dashboard.html">Dashboard</a>
+            <a href="/logout">Logout</a>
+          `;
+        }
+      })
+      .catch(() => {}); // fail silently
+  </script>
+</body>
+</html>

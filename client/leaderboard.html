@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thira | Leaderboard</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f9fafb;
+      color: #1f2937;
+      font-family: 'Inter', sans-serif;
+
+    }
+
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+      color: #111827;
+    }
+
+    p {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2rem 0;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+      background-color: #354EAD;
+      font-weight: 600;
+    }
+
+    .btn-group {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .btn-group a {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #354EAD;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .btn-group a:hover {
+      background-color: #1d4ed8;
+    }
+
+    footer {
+      background-color: #354EAD;
+      color: #f9fafb;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 3rem;
+    }
+
+    footer img {
+      height: 40px;
+      margin-bottom: 1rem;
+    }
+
+    footer a {
+      color: #93c5fd;
+      margin: 0 1rem;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="temp-banner">
+  🚧 Prototype Preview – Live for demo only 🚧
+</div>
+  <script src="js/main.js"></script>
+
+  <nav class="navbar">
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="desktop-left-links">
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">Who We Are</a>
+      <a href="what-we-do.html">What We Do</a>
+      <a href="leaderboard.html" class="active">Leaderboard</a>
+    </div>
+
+    <div id="mobileMenu" class="mobile-menu hidden">
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">Who We Are</a>
+      <a href="what-we-do.html">What We Do</a>
+      <a href="leaderboard.html">Leaderboard</a>
+    </div>
+
+    <div class="logo">
+      <a href="/"><img src="/images/thira-logo.png" alt="Project Thira Logo" height="40" /></a>
+    </div>
+
+    <div class="nav-links" id="navLinks">
+      <a href="signup.html">Sign Up</a>
+      <a href="login.html">Login</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="leaderboard-intro">
+      <h1>Top Companies in Wellness</h1>
+      <p>
+        Being at the top of the Thira leaderboard means your company is leading the way in employee wellbeing.
+        It’s not just about points — it’s about fostering healthier, happier, and more productive teams.
+        The competition drives positive habits that create lasting change in workplace culture.
+      </p>
+    </section>
+
+    <h1>Top Companies Leaderboard</h1>
+    <table id="leaderboardTable" aria-label="Leaderboard Table">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Company</th>
+          <th>Wellness Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="3">Loading leaderboard...</td></tr>
+      </tbody>
+    </table>
+
+    <div class="btn-group">
+      <a href="plans.html">Join Now</a>
+      <a href="what-we-do.html">Learn More</a>
+      <a href="leaderboard-full.html">View Full Leaderboard</a>
+    </div>
+  </main>
+
+  <footer>
+    <img src="/images/thira-logo.png" alt="Thira Logo" />
+    <div>
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2025 Project Thira. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Navbar user login update
+    fetch('/me')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        const nav = document.getElementById('navLinks');
+        if (data?.user) {
+          nav.innerHTML = `
+            <a href="dashboard.html">Dashboard</a>
+            <a href="/logout">Logout</a>
+          `;
+        }
+      })
+      .catch(() => {});
+
+    // Hamburger toggle
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('active');
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Load leaderboard
+
+  async function loadLeaderboard() {
+    const tbody = document.querySelector('#leaderboardTable tbody');
+    try {
+      const response = await fetch('/api/leaderboard?limit=10');
+      if (!response.ok) throw new Error('Failed to fetch leaderboard');
+
+      const leaderboard = await response.json();
+
+      if (!leaderboard.length) {
+        tbody.innerHTML = '<tr><td colspan="3">No companies found yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = ''; // Clear previous content
+
+      leaderboard.forEach(entry => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${entry.rank}</td>
+          <td>${entry.company}</td>
+          <td>${entry.score}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    } catch (err) {
+      tbody.innerHTML = '<tr><td colspan="3">Error loading leaderboard.</td></tr>';
+      console.error(err);
+    }
+  }
+
+  loadLeaderboard();
+  </script>
+</body>
+</html>

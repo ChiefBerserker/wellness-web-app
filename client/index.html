@@ -1,184 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Matra | Empowering Office Wellbeing</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thira | Empowering Office Wellbeing</title>
   <link rel="stylesheet" href="css/styles.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background-color: #121212;
-      color: #f0f0f0;
-    }
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      padding: 1rem 2rem;
-      background-color: #1e1e1e;
-      align-items: center;
-    }
-
-    .logo a {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: white;
-      text-decoration: none;
-    }
-
-    .nav-links a {
-      color: #ccc;
-      text-decoration: none;
-      margin-left: 1.5rem;
-    }
-
-    .nav-links a:hover {
-      color: #fff;
-    }
-
-    .hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 90vh;
-    width: 100%;
-    background: url('/images/office_wellness.jpg') center/cover no-repeat;
-    position: relative;
-    text-align: center;
-    padding: 4rem 2rem;
-    box-sizing: border-box;
-    }
-
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      max-width: 800px;
-      width: 100%;
-    }
-
-    .hero h1 {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      margin-bottom: 2rem;
-    }
-
-    .hero button {
-      padding: 0.75rem 1.5rem;
-      background: #007bff;
-      border: none;
-      color: white;
-      font-size: 1rem;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-
-    .sections {
-      padding: 4rem 2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .card {
-      background-color: #1c1c1c;
-      padding: 1.5rem;
-      border-radius: 10px;
-      position: relative;
-    }
-
-    .card img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-    }
-
-    .card h3 {
-      margin: 0.5rem 0;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2rem;
-      color: #777;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  
 </head>
 <body>
-  <nav class="navbar">
-    <div class="logo"><a href="/">Matra</a></div>
-    <div class="nav-links" id="navLinks">
-      <a href="signup.html">Sign Up</a>
-      <a href="login.html">Login</a>
-    </div>
-  </nav>
+  <script src="js/main.js"></script>
+  <div class="temp-banner">
+  🚧 Prototype Preview – Live for demo only 🚧
+</div>
+<nav class="navbar">
 
-  <section class="hero">
-    <div class="hero-content">
-      <h1>Empowering Office Wellbeing</h1>
-      <p>Track goals, support each other, and build healthier workplaces with Matra.</p>
-      <button onclick="location.href='plans.html'">Get Started</button>
-    </div>
-  </section>
+  <!-- Hamburger (left) -->
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
+  <!-- DESKTOP left nav links -->
+  <div class="desktop-left-links">
+    <a href="index.html">Home</a>
+    <a href="who-we-are.html">Who We Are</a>
+    <a href="what-we-do.html">What We Do</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Mobile menu (left) -->
+  <div id="mobileMenu" class="mobile-menu hidden">
+    <a href="index.html">Home</a>
+    <a href="who-we-are.html">Who We Are</a>
+    <a href="what-we-do.html">What We Do</a>
+    <a href="leaderboard.html">Leaderboard</a>
+  </div>
+
+  <!-- Centered Logo -->
+  <div class="logo">
+    <a href="/"><img src="/images/thira-logo.png" alt="Project Thira Logo" height="40" /></a>
+  </div>
+
+  <!-- Right nav links -->
+  <div class="nav-links" id="navLinks">
+    <a href="signup.html">Sign Up</a>
+    <a href="login.html">Login</a>
+  </div>
+
+</nav>
+
+
+
+
+  <div class="topCompany">
+  <h2>Current Leader of Wellness:</h2>
+  <h1 id="topCompanyName">Loading...</h1>
+</div>
+
+  <div class="topText">
+    <h1>Wellness, Simplified | Growth, Amplified</h1>
+  </div>
+
+  <section class="hero-alt">
+    <p class="hover-info">Hover over the items below for more info</p>
+  <div class="hero-grid">
+    <div class="hero-column" id="what-we-do">
+      <div class="basic-content"><h2>What We Do</h2>
+      <p>Matra brings a fresh take on wellbeing. We combine daily tracking and accountability.</p>
+    </div>
+      <div class="extra-content">
+        <p>We provide simple tools that embed wellness into your workflow — no fluff, just results.</p>
+        <a href="what-we-do.html" class="hero-btn">Learn More</a>
+      </div>
+    </div>
+
+    <div class="hero-column" id="homeLeaderboard">
+      <div class="basic-content">
+        <h2>Top 3 Companies</h2>
+        <ol id="homeLeaderboardList">
+          <li>Leaderboard Not Loading</li>
+        </ol>
+      </div>
+      <div class="extra-content">
+        <p>See how your company stacks up and what it takes to climb higher.</p>
+        <a href="leaderboard.html" class="hero-btn">Explore Leaderboards</a>
+      </div>
+    </div>
+
+    <div class="hero-column" id="why-it-works">
+      <div class="basic-content">
+        <h2>Why It Works</h2>
+        <p>We design around engagement — our system feels intuitive and rewarding to use.</p>
+      </div>
+      <div class="extra-content">
+        <p>From gamified tracking to instant recognition, we make good habits stick.</p>
+        <a href="why-it-works.html" class="hero-btn">How It Works</a>
+      </div>
+    </div>
+  </div>
+</section>
   <section class="sections">
-    <div class="card">
-      <img src="/images/goals.jpg" alt="Goals">
-      <h3>Goal Setting</h3>
-      <p>Help teams stay accountable with clear wellbeing goals tracked daily or weekly.</p>
-    </div>
-    <div class="card">
-      <img src="/images/leaderboard.jpg" alt="Leaderboard">
-      <h3>Leaderboard</h3>
-      <p>Foster friendly competition with live leaderboards and positive engagement.</p>
-    </div>
-    <div class="card">
-      <img src="/images/integration.jpg" alt="Integration">
-      <h3>Mat Integration</h3>
-      <p>Bridge the gap between physical activity and software with real-time syncing mats.</p>
-    </div>
-  </section>
+  <div class="card">
+    <img src="/images/goals.jpg" alt="Goal Setting">
+    <h3>Goal Setting</h3>
+    <p>Empower teams to stay motivated and accountable by setting clear, trackable wellbeing goals — daily or weekly.</p>
+  </div>
+  
+  <div class="card">
+    <img src="/images/leaderboard.jpg" alt="Leaderboard">
+    <h3>Leaderboards</h3>
+    <p>Drive engagement with friendly competition across teams, departments, and the whole company.</p>
+  </div>
+
+  <div class="card">
+    <img src="/images/analytics.jpg" alt="Insightful Analytics">
+    <h3>Insightful Analytics</h3>
+    <p>Track progress, trends, and team wellbeing with data-driven insights designed for HR and managers.</p>
+  </div>
+
+  <div class="card">
+    <img src="/images/integration.jpg" alt="AI Stress Detection">
+    <h3>Upcoming AI Features</h3>
+    <p>We're developing AI-driven mood tracking to identify stress and burnout early—helping teams stay healthier and more productive.</p>
+  </div>
+</section>
+
+<section class="cta-final">
+  <h2>Take the First Step Toward a Healthier Workplace</h2>
+  <p>Choose the plan that fits your team and start making wellbeing a priority today.</p>
+  <a href="/plans.html" class="cta-link">View Plans & Pricing</a>
+</section>
+
 
   <footer>
-    &copy; 2025 Matra — All rights reserved
+    <img src="/images/thira-logo.png" alt="Thira Logo" />
+    <div>
+      <a href="index.html">Home</a>
+      <a href="who-we-are.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+    <p>© 2025 Project Thira. All rights reserved.</p>
   </footer>
 
   <script>
+    // Update navbar links if user is logged in
     fetch('/me')
-    .then(res => res.ok ? res.json() : null)
-    .then(data => {
-      const nav = document.getElementById('navLinks');
-      if (data?.user) {
-        nav.innerHTML = `
-          <a href="dashboard.html">Dashboard</a>
-          <a href="/logout">Logout</a>
-        `;
-      }
-    })
-    .catch(() => {}); // silently ignore if not logged in
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        const nav = document.getElementById('navLinks');
+        if (data?.user) {
+          nav.innerHTML = `
+            <a href="dashboard.html">Dashboard</a>
+            <a href="/logout">Logout</a>
+          `;
+        }
+      })
+      .catch(() => {}); // fail silently
 
-    const params = new URLSearchParams(window.location.search);
-    const company = params.get('company') || 'your company';
-    document.getElementById('companyText').textContent = `You've arrived from ${company}.`;
+    async function loadLeaderboard() {
+  try {
+    const res = await fetch('/api/leaderboard?limit=3');
+    if (!res.ok) throw new Error('Failed to fetch leaderboard');
+
+    const leaderboard = await res.json();
+    const list = document.getElementById('homeLeaderboardList');
+    list.innerHTML = '';
+
+    if (leaderboard.length === 0) {
+      list.innerHTML = '<li>No companies found yet.</li>';
+      return;
+    }
+
+    // Update top company display
+    if (leaderboard.length > 0) {
+      const topCompany = leaderboard[0].company;
+      const topCompanyName = document.getElementById('topCompanyName');
+      if (topCompanyName) {
+        topCompanyName.textContent = topCompany;
+      }
+    }
+
+    const medals = ["🥇", "🥈", "🥉"];
+
+    leaderboard.forEach(entry => {
+      const li = document.createElement('li');
+      const medal = medals[entry.rank - 1] || '';
+      li.innerHTML = `
+        <span class="company-name">${medal} ${entry.company}</span>
+        <span class="company-score">${entry.score} pts</span>
+      `;
+      list.appendChild(li);
+    });
+
+  } catch (e) {
+    console.error(e);
+    document.getElementById('homeLeaderboardList').innerHTML = '<li>Unable to load leaderboard.</li>';
+  }
+}
+
+
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('active');
+  mobileMenu.classList.toggle('hidden');
+});
+
+ const grid = document.querySelector('.hero-grid');
+  const columns = document.querySelectorAll('.hero-column');
+
+  columns.forEach(col => {
+    col.addEventListener('mouseenter', () => {
+      grid.classList.add('hovering');
+      columns.forEach(c => c.classList.remove('active'));
+      col.classList.add('active');
+    });
+
+    col.addEventListener('mouseleave', () => {
+      grid.classList.remove('hovering');
+      columns.forEach(c => c.classList.remove('active'));
+    });
+  });
+
+
+
+    loadLeaderboard();
   </script>
 </body>
 </html>
